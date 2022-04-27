@@ -11,9 +11,9 @@ namespace IL2ASM
 
             foreach (var Import in Code.GetAssemblyRefs())
             {
-                Writer.WriteLine("%include \"Libraries/" + Import.Name.Replace(".", "/") + ".asm\"");
+                Writer.WriteLine("%include \"Libraries" + Tools.Separator + Import.Name.Replace(".", Tools.Separator) + ".asm\"");
             }
-            Writer.WriteLine("\njmp Kernel.Main");
+            Writer.WriteLine("jmp Kernel.Main");
             Writer.WriteLine("");
             foreach (var Class in Code.Types)
             {
@@ -28,13 +28,12 @@ namespace IL2ASM
                     {
                         continue;
                     }
-                    
-                    Method.Name=FormatMName(Method.Name);
+                    Method.Name = FormatMName(Method.Name);
                     Writer.WriteLine("\t." + Method.Name + ":");
-                    
+
                     foreach (var Call in Method.Body.Instructions)
                     {
-                        /*if (Call.OpCode.Name == "ldstr")
+                        if (Call.OpCode.Name == "ldstr")
                         {
                             Writer.WriteLine("    push \"" + Call.Operand + "\"");
                             continue;
@@ -43,7 +42,7 @@ namespace IL2ASM
                         {
                             continue;
                         }
-                        Writer.WriteLine("    " + Call.OpCode + " " + Call.Operand);*/
+                        Writer.WriteLine("    " + Call.OpCode + " " + Call.Operand);
                     }
                     Writer.WriteLine("");
                 }
@@ -51,8 +50,9 @@ namespace IL2ASM
 
             return Writer.ToString();
         }
-        
-        public static string FormatMName(string name) {
+
+        public static string FormatMName(string name)
+        {
             return name.Replace("<", "").Replace(">", "").Replace("$", "");
         }
     }

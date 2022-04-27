@@ -3,7 +3,7 @@
 jmp Kernel.Main
 
 Kernel:
-  Main:
+	.Main:
     push "Hello, World!"
     call System.Void System.Console::WriteLine(System.String)
     ret 
