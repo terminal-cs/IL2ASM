@@ -1,17 +1,22 @@
-using System.Diagnostics;
+namespace IL2ASM {
 
-string Root = "..\\..\\..\\..\\";
-string Input = Root + "Kernel\\bin\\Debug\\net6.0\\Kernel.dll";
-string OutputASM = Root + "Kernel.asm";
-string OutputELF = Root + "Kernel.elf";
-Process Nasm = new()
-{
-    StartInfo = new()
-    {
-        FileName = Root + "nasm.exe",
-        Arguments = OutputASM + " -o " + OutputELF,
-    },
-};
+    public static class Entry {
+        static string Input = Tools.Format("Kernel/bin/Debug/net6.0/Kernel.dll");
+        static string Output = Tools.Format("bin/Kernel.asm");
+        static string OutputElf = Tools.Format("bin/kernel.elf");
+        static string Nasm = Tools.IsLinux ? "nasm" : (Tools.Format("bin/nasm.exe"));
 
-File.WriteAllText(OutputASM, IL2ASM.IL2ASM.Compile(Input));
-Nasm.Start();
+        public static void Main() {
+
+            File.WriteAllText(Output, IL2ASM.Compiler.Compile(Input));
+            Process Nasm = new()
+            {
+                StartInfo = new()
+                {
+                    FileName = nasm,
+                    Arguments = Output + " -o " + OutputElf,
+                },
+            };
+        }
+    }
+}
