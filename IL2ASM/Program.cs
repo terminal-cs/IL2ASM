@@ -1,13 +1,14 @@
 using System.Diagnostics;
 
-string Input = "..\\..\\..\\..\\Kernel\\bin\\Debug\\net6.0\\Kernel.dll";
-string OutputASM = "..\\..\\..\\..\\Kernel.asm";
-string OutputELF = "..\\..\\..\\..\\Kernel.elf";
+string Root = "..\\..\\..\\..\\";
+string Input = Root + "Kernel\\bin\\Debug\\net6.0\\Kernel.dll";
+string OutputASM = Root + "Kernel.asm";
+string OutputELF = Root + "Kernel.elf";
 Process Nasm = new()
 {
     StartInfo = new()
     {
-        FileName = "..\\..\\..\\..\\nasm.exe",
+        FileName = Root + "nasm.exe",
         Arguments = OutputASM + " -o " + OutputELF,
     },
 };
