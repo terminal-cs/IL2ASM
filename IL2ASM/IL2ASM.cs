@@ -13,10 +13,15 @@ namespace IL2ASM
             {
                 Writer.WriteLine("%include \"Libraries\\" + Import.Name.Replace(".", "\\") + ".asm\"");
             }
-            Writer.WriteLine("jmp Main");
+            Writer.WriteLine("jmp Kernel.Main");
             Writer.WriteLine("");
             foreach (var Class in Code.Types)
             {
+                if (Class.Name == "<Module>")
+                {
+                    continue;
+                }
+                Writer.WriteLine(Class.Name + ":");
                 foreach (var Method in Class.Methods)
                 {
                     if (Method.Name == ".ctor")
@@ -27,7 +32,7 @@ namespace IL2ASM
                     {
                         Method.Name = "Main";
                     }
-                    Writer.WriteLine(Method.Name + ":");
+                    Writer.WriteLine("  " + Method.Name + ":");
                     foreach (var Call in Method.Body.Instructions)
                     {
                         if (Call.OpCode.Name == "ldstr")
@@ -39,7 +44,7 @@ namespace IL2ASM
                         {
                             continue;
                         }
-                        Writer.WriteLine("  " + Call.OpCode + " " + Call.Operand);
+                        Writer.WriteLine("    " + Call.OpCode + " " + Call.Operand);
                     }
                     Writer.WriteLine("");
                 }
