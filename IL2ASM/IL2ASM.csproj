@@ -13,4 +13,12 @@
     </Reference>
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="dotnet build Kernel\Kernel.csproj" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="nasm Kernel.asm -o Kernel.elf" />
+  </Target>
+
 </Project>
