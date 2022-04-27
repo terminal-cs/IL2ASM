@@ -10,6 +10,6 @@
                 return (p == 4) || (p == 6) || (p == 128);
             }
         }
-        public static string Separator => (IsLinux ? "/" : "\\");
+        public static string Separator => IsLinux ? "/" : "\\";
     }
 }
