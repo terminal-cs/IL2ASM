@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace IL2ASM {
 
     public static class Entry {
@@ -9,14 +11,7 @@ namespace IL2ASM {
         public static void Main() {
 
             File.WriteAllText(Output, IL2ASM.Compiler.Compile(Input));
-            Process Nasm = new()
-            {
-                StartInfo = new()
-                {
-                    FileName = nasm,
-                    Arguments = Output + " -o " + OutputElf,
-                },
-            };
+            Process.Start(Nasm, Output+" -o "+OutputElf);
         }
     }
 }
