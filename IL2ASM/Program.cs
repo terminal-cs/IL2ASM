@@ -1,4 +1,4 @@
-﻿Console.WriteLine("Ready!");
-string Input = Console.ReadLine();
-string Output = IL2ASM.IL2ASM.Compile(Input);
-File.WriteAllText("Out.asm", Output);
+﻿string Input = "..\\..\\..\\..\\Kernel\\bin\\Debug\\net6.0\\Kernel.dll";
+string Output = "..\\..\\..\\..\\Kernel.asm";
+
+File.WriteAllText(Output, IL2ASM.IL2ASM.Compile(Input));

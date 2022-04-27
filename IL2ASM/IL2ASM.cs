@@ -37,7 +37,7 @@ namespace IL2ASM
                     {
                         if (Call.OpCode.Name == "ldstr")
                         {
-                            Writer.WriteLine("  push \"" + Call.Operand + "\"");
+                            Writer.WriteLine("    push \"" + Call.Operand + "\"");
                             continue;
                         }
                         if (Call.IsStarg() || Call.IsStloc() || Call.IsLdarg() || Call.IsLdloc() || Call.OpCode.Name == "nop")
