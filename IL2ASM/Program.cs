@@ -11,7 +11,8 @@ namespace IL2ASM {
 
             Directory.CreateDirectory("..\\..\\..\\..\\Binary\\");
             File.WriteAllText(Output + ".asm", Compiler.Compile(Input));
-            Process.Start("..\\..\\..\\..\\nasm.exe", Output + ".asm " + Output+" -o " + Output + ".elf -I.\\Binary\\");
+            Process.Start("..\\..\\..\\..\\nasm.exe", Output + ".asm " + " -o " + Output + ".bin -IBinary\\Libraries\\");
+            Process.Start("C:\\qemu\\qemu-system-i386.exe", "..\\..\\..\\..\\Binary\\Kernel.bin");
         }
     }
 }

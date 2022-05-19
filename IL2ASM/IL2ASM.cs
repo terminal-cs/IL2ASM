@@ -9,31 +9,46 @@ namespace IL2ASM
         {
             ModuleDefMD Code = ModuleDefMD.Load(Path);
             StringWriter Writer = new();
+            int StringIndex = 0;
+
+            foreach (AssemblyRef Include in Code.GetAssemblyRefs())
+            {
+                Writer.WriteLine("%include \"..\\..\\..\\..\\Binary\\Libraries\\" + Include.Name + ".asm\"");
+            }
+            Writer.WriteLine("\n[org 0x7c00]\nmov ah, 0x0e\njmp Main\n");
 
             foreach (TypeDef Class in Code.Types)
             {
                 foreach (MethodDef Method in Class.Methods)
                 {
-                    Writer.WriteLine(Method.FullName + ":");
-                    foreach (Local Variable in Method.Body.Variables)
+                    if (Method.Name == ".ctor")
                     {
-                        Writer.WriteLine("  " + Variable.Name + ":");
-                        Writer.WriteLine("    db Type " + Variable.Type.ToString());
-                        Writer.WriteLine("    db Value " + Variable.ToString());
-                        Writer.WriteLine("    d");
+                        continue;
                     }
-                    foreach (var Instruction in Method.Body.Instructions)
+                    Writer.WriteLine(Method.Name + ":");
+                    foreach (Instruction Instruction in Method.Body.Instructions)
                     {
+                        string Line = Instruction.ToString();
                         if (Instruction.OpCode == OpCodes.Nop)
                         {
                             continue;
                         }
-                        Writer.WriteLine(Instruction.ToString());
+                        if (Instruction.OpCode == OpCodes.Ldstr)
+                        {
+                            string Data = Line[16..(Line.Length - 1)];
+                            Writer.WriteLine("  S" + StringIndex + " db \"" + Data + "\", 0xa");
+                            Writer.WriteLine("  push byte S" + StringIndex++);
+                            Writer.WriteLine("  push " + Data.Length);
+                            continue;
+                        }
+                        string Arguments = Instruction.Operand == null ? "" : " " + Instruction.Operand.ToString().Split(" ")[1].Split("(")[0].Replace("::", ".");
+                        Writer.WriteLine("  " + Instruction.OpCode + Arguments);
                     }
                 }
             }
 
-            return Writer.ToString();
+            Writer.WriteLine("\ntimes 510-($-$$) db 0\ndw 0xAA55");
+            return Writer.ToString()[0..(Writer.ToString().Length - 2)];
         }
     }
 }
