@@ -6,10 +6,13 @@ mov ah, 0x0e
 jmp Main
 
 Main:
+  jmp .cctor
+  call System.Console.WriteLine
+  ret
+.cctor:
   S0 db "Hello, World!", 0xa
   push byte S0
   push 13
-  call System.Console.WriteLine
   ret
 
 times 510-($-$$) db 0

@@ -41,6 +41,15 @@ namespace IL2ASM
                             Writer.WriteLine("  push " + Data.Length);
                             continue;
                         }
+                        if (Instruction.OpCode == OpCodes.Ldsfld)
+                        {
+                            Writer.WriteLine("  jmp .cctor");
+                            continue;
+                        }
+                        if (Instruction.OpCode == OpCodes.Stsfld)
+                        {
+                            continue;
+                        }
                         string Arguments = Instruction.Operand == null ? "" : " " + Instruction.Operand.ToString().Split(" ")[1].Split("(")[0].Replace("::", ".");
                         Writer.WriteLine("  " + Instruction.OpCode + Arguments);
                     }
