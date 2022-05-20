@@ -13,9 +13,10 @@ namespace IL2ASM
 
             foreach (AssemblyRef Include in Code.GetAssemblyRefs())
             {
+                Console.WriteLine($"Including assembly {Include.Name}");
                 Writer.WriteLine("%include \"..\\..\\..\\..\\Binary\\Libraries\\" + Include.Name + ".asm\"");
             }
-            Writer.WriteLine("\n[org 0x7c00]\nmov ah, 0x0e\njmp Main\n");
+            Writer.WriteLine("\n[bits 32]\n[global Main]\n");
 
             foreach (TypeDef Class in Code.Types)
             {
@@ -37,8 +38,8 @@ namespace IL2ASM
                         if (Instruction.OpCode == OpCodes.Ldstr)
                         {
                             string Data = Line[16..(Line.Length - 1)];
-                            Writer.WriteLine("  S" + StringIndex + " db \"" + Data + "\", 0xa");
-                            Writer.WriteLine("  push byte S" + StringIndex++);
+                            Writer.WriteLine("  db \"" + Data + "\", 0xa");
+                            Writer.WriteLine("  push byte 0xa");
                             Writer.WriteLine("  push " + Data.Length);
                             continue;
                         }
