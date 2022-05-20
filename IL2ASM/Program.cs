@@ -13,7 +13,7 @@ namespace IL2ASM
             }
         }
         public static string SP = IsLinux ? "/" : "\\";
-        public static string Root = $"..{SP}..{SP}..{SP}..{SP}";
+        public static string Root = System.IO.Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName + SP;
         public static string Nasm = IsLinux ? "nasm" : Root + "nasm.exe";
         public static string Qemu = IsLinux ? "qemu-system-i386" : $"C:{SP}Program Files{SP}qemu{SP}qemu-system-i386.exe";
         public static string Input = $"{Root}Kernel{SP}bin{SP}Debug{SP}net6.0{SP}Kernel.dll";
@@ -21,17 +21,27 @@ namespace IL2ASM
 
         public static void Main()
         {
-            if (!File.Exists(Qemu) && !File.Exists(Nasm))
+            if(!IsLinux)
             {
-                Console.WriteLine("Qemu/nasm not found!");
+                if (!File.Exists(Qemu) && !File.Exists(Nasm))
+                {
+                    Console.WriteLine("Qemu/nasm not found!");
+                }
             }
             if (!Directory.Exists($"{Root}Binary{SP}"))
             {
                 Directory.CreateDirectory($"{Root}Binary{SP}");
             }
+            try {
             File.WriteAllText(Output + ".asm", Compiler.Compile(Input));
             Process.Start(Nasm, Output + ".asm " + " -o " + Output + $".bin -IBinary{SP}Libraries{SP}");
             Process.Start(Qemu, $"{Root}Binary{SP}Kernel.bin");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
         }
     }
 }
