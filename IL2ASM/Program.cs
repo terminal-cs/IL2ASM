@@ -19,7 +19,18 @@ namespace IL2ASM {
         public static string Input = $"{Root}Kernel{SP}bin{SP}Debug{SP}net6.0{SP}Kernel.dll";
         public static string Output = $"{Root}Binary{SP}Kernel";
 
-        public static void Main() {
+
+        public static void Main()
+        {
+            //linux distros usually dont need a path and can just use the executable name
+            //but windows needs the full path
+            //also the path differs on several linux distros
+            if(!IsLinux) {
+            if (!File.Exists(Qemu) && !File.Exists(Nasm))
+            {
+                Console.WriteLine("Qemu/nasm not found!");
+            }
+            }
             if(!Directory.Exists($"{Root}Binary{SP}")) {
             Directory.CreateDirectory($"{Root}Binary{SP}");
             }
