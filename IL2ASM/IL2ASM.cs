@@ -21,6 +21,7 @@ namespace IL2ASM
             {
                 foreach (MethodDef Method in Class.Methods)
                 {
+                    bool AlreadyInit = false;
                     if (Method.Name == ".ctor")
                     {
                         continue;
@@ -41,7 +42,7 @@ namespace IL2ASM
                             Writer.WriteLine("  push " + Data.Length);
                             continue;
                         }
-                        if (Instruction.OpCode == OpCodes.Ldsfld)
+                        if (Instruction.OpCode == OpCodes.Ldsfld && !AlreadyInit)
                         {
                             Writer.WriteLine("  jmp .cctor");
                             continue;
