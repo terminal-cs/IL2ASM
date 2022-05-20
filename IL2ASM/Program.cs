@@ -22,7 +22,7 @@ namespace IL2ASM
 
         public static void Main()
         {
-            if(!IsLinux)
+            if(!IsLinux) // Only check on wndows because some distros place files differently
             {
                 if (!File.Exists(Qemu) && !File.Exists(Nasm))
                 {
@@ -37,7 +37,6 @@ namespace IL2ASM
             Process.Start(Nasm,"-felf32 " + Output + ".asm " + " -o " + Output + $".o -IBinary{SP}Libraries{SP}");
             Process.Start(Nasm, "-felf32 " + Root + "boot.asm " + " -o "+Root+"boot.a");
             Process.Start(LD,Root+"boot.a "+ Output + $".o -o {Root}Binary{SP}Kernel.bin -T {Root}linker.ld");
-            System.Threading.Thread.Sleep(1000);
             Process.Start(Qemu, $" -kernel {Root}Binary{SP}Kernel.bin");
             
         }
