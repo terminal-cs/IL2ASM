@@ -13,7 +13,7 @@ namespace IL2ASM
             }
         }
         public static string SP = IsLinux ? "/" : "\\";
-        public static string Root = System.IO.Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName + SP;
+        public static string Root = $".{SP}..{SP}..{SP}..{SP}..{SP}";
         public static string Nasm = IsLinux ? "nasm" : Root + "nasm.exe";
         public static string Qemu = IsLinux ? "qemu-system-i386" : $"C:{SP}Program Files{SP}qemu{SP}qemu-system-i386.exe";
         public static string LD = IsLinux ? "ld" : Root + "ld.exe";
